@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bagas Aditya · Human Geographer | Urban Informal Economy &amp; Spatial Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-high": "#e7e8e7","on-tertiary-fixed-variant": "#005236","surface-bright": "#f9f9f8",
+          "surface-container-highest": "#e1e3e2","on-surface-variant": "#414846","on-primary": "#ffffff",
+          "surface-tint": "#49645d","primary-container": "#16302b","on-primary-fixed": "#05201b",
+          "secondary-fixed": "#dde5d5","on-secondary-container": "#5d6558","outline-variant": "#c1c8c5",
+          "on-tertiary-container": "#00a774","on-secondary-fixed": "#161d13","tertiary-fixed": "#6ffbbe",
+          "error-container": "#ffdad6","secondary-container": "#dae2d2","on-secondary": "#ffffff",
+          "tertiary-container": "#003320","primary": "#011b17","on-tertiary": "#ffffff",
+          "surface-container-low": "#f3f4f3","surface": "#f9f9f8","surface-container": "#edeeed",
+          "secondary": "#596154","on-secondary-fixed-variant": "#41493d","inverse-primary": "#b0cdc5",
+          "surface-container-lowest": "#ffffff","secondary-fixed-dim": "#c1c9b9","on-primary-container": "#7d9892",
+          "on-surface": "#191c1c","tertiary": "#001c10","inverse-surface": "#2e3131","outline": "#727876",
+          "surface-variant": "#e1e3e2","surface-dim": "#d9dad9","on-background": "#191c1c","background": "#f9f9f8",
+          "tertiary-fixed-dim": "#4edea3","error": "#ba1a1a","on-error-container": "#93000a",
+          "inverse-on-surface": "#f0f1f0","primary-fixed": "#cce9e1","on-tertiary-fixed": "#002113",
+          "on-error": "#ffffff","primary-fixed-dim": "#b0cdc5","on-primary-fixed-variant": "#324c46"
+        },
+        borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" },
+        spacing: { "margin-mobile": "20px", "container-max": "1280px", "gutter": "24px", "base": "8px", "margin-desktop": "64px" },
+        fontFamily: {
+          "mono-data": ["Inter"], "headline-md": ["Hanken Grotesk"], "body-lg": ["Inter"],
+          "headline-xl": ["Hanken Grotesk"], "label-caps": ["Inter"], "headline-lg": ["Hanken Grotesk"],
+          "headline-lg-mobile": ["Hanken Grotesk"], "body-md": ["Inter"], "headline-sm": ["Hanken Grotesk"]
+        },
+        fontSize: {
+          "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+          "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+          "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+          "headline-xl": ["60px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+          "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+          "headline-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+          "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+          "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+          "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  section[id] { scroll-margin-top: 96px; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .hud-overlay { background: rgba(1, 27, 23, 0.05); backdrop-filter: blur(4px); }
+  .hud-border { border: 1px solid rgba(89, 97, 84, 0.2); }
+  .animated-hero-bg { background: #011b17; position: relative; overflow: hidden; }
+  .video-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(1,27,23,0.85), rgba(1,27,23,0.5)); z-index: 2; }
+  .topographic-overlay {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuARbkIpWEj25_cGjHvC0PNpOU2_rHU7nxPtpQak5hx_b4LnDSdglJQOVVXLHsgDXH8z9-HddhSmSeFSrDPCG6prPecfo2YWyxHV34g050JShgLoFiqYX-LYGOf2_nIrW_WC2byuJzxZcT_qa6_h9-BNHepQXcTDfNbtjQYJttYQ16y8INgX0hsWEfTKPy3Gad7AuowghvPV_rDz3Z-3X2Sc7gtml_NIXZwkItLn39rBCX6V6sAzG3Yw5oShjAF43fnHPW1q7ItmUw);
+    background-size: cover; background-position: center; opacity: 0.15; mix-blend-mode: overlay; z-index: 3;
+  }
+  @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+  .scanline { background: linear-gradient(to bottom, transparent, rgba(0,167,116,0.15), transparent); height: 150px; width: 100%; position: absolute; animation: scanline 10s linear infinite; z-index: 4; }
+  .particle { position: absolute; background: #4edea3; border-radius: 50%; opacity: 0.3; pointer-events: none; z-index: 5; }
+  .hero-text-shadow { text-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+  .pub-card.is-hidden { display: none; }
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+<!-- ============ TOP NAV ============ -->
+<nav class="fixed top-0 left-1/2 -translate-x-1/2 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 max-w-container-max mx-auto bg-surface/80 backdrop-blur-md border-b border-outline-variant/20">
+  <a href="#home" class="font-headline-md text-headline-md font-bold text-primary">Bagas Aditya</a>
+  <div class="hidden md:flex items-center gap-6 lg:gap-gutter font-body-md text-body-md">
+    <a class="nav-link text-on-tertiary-container font-semibold border-b-2 border-on-tertiary-container py-1 transition-all" href="#home">Home</a>
+    <a class="nav-link text-on-surface-variant hover:text-primary transition-colors duration-200 py-1" href="#about">About</a>
+    <a class="nav-link text-on-surface-variant hover:text-primary transition-colors duration-200 py-1" href="#skills">Skills</a>
+    <a class="nav-link text-on-surface-variant hover:text-primary transition-colors duration-200 py-1" href="#experience">Experience</a>
+    <a class="nav-link text-on-surface-variant hover:text-primary transition-colors duration-200 py-1" href="#publications">Publications</a>
+  </div>
+  <a href="#contact" class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-caps text-label-caps hover:opacity-80 transition-all active:scale-95">Get in Touch</a>
+</nav>
+
+<main>
+  <!-- ============ HERO ============ -->
+  <section id="home" class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-margin-mobile md:px-margin-desktop py-20">
+    <div class="absolute inset-0 z-0 animated-hero-bg">
+      <video autoplay class="absolute inset-0 w-full h-full object-cover z-0 grayscale-[0.2] brightness-75" loop muted playsinline poster="https://lh3.googleusercontent.com/aida-public/AB6AXuAF8fLTSm4j8LZQ1CcOcMV1aQsjPilY0zA43IeIRlGH0lFMVXsx-4NougvnOQbctaX_p1mK-s73p6Kj0kw1BwscEbzRdHrQ5yGyqbsvAVQ9naovgg0_UEsQdv9-2GAj0BaCuuC1doKGVzvCJ_UkFTpJCZWeo0B72q5eXTF3mW7fFydSB-zcseNEnS_yBeno1KhKYQpxenjlODqLOL1Ax4_5wEBBPTmpsmk58ORgGMBEEmPB3Ft5Vc0UepBMHndMKn-cSiv9ecrhXA">
+        <source src="https://storage.googleapis.com/a1aa/video/deforestation_satellite_sim.mp4" type="video/mp4"/>
+      </video>
+      <div class="video-overlay opacity-70"></div>
+      <div class="absolute inset-0 topographic-overlay"></div>
+      <div class="scanline"></div>
+      <div class="absolute inset-0 overflow-hidden" id="particles-container"></div>
+      <div class="absolute inset-0 bg-primary/20 backdrop-blur-[0.5px]"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center z-10 w-full max-w-container-max mx-auto">
+      <div class="md:col-span-10 flex flex-col gap-8">
+        <div class="flex flex-col gap-3">
+          <span class="font-label-caps text-label-caps text-tertiary-fixed uppercase tracking-[0.2em] border-l-2 border-tertiary-fixed pl-4">Human Geographer · Urban Informal Economy &amp; Spatial Analysis</span>
+          <h1 class="font-headline-xl text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[0.95] text-white uppercase font-extrabold hero-text-shadow">Mapping the <span class="text-tertiary-fixed">Urban Informal</span> Economy</h1>
+        </div>
+        <div class="flex flex-col md:flex-row gap-8 items-start md:items-center">
+          <p class="font-body-lg text-body-lg text-primary-fixed-dim max-w-md">Studying informal livelihoods, economic resilience, and urban governance across Indonesian cities — combining spatial mapping, spatio-temporal modelling, and ethnographic fieldwork.</p>
+          <div class="flex flex-col gap-3">
+            <a href="#publications" class="bg-white text-primary px-8 py-3 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-tertiary-fixed transition-colors">VIEW PUBLICATIONS <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+            <a href="#about" class="border border-white/40 text-white px-8 py-3 rounded-full hover:bg-white/10 transition-colors backdrop-blur-sm text-center">ABOUT ME</a>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-8">
+          <div class="flex flex-col">
+            <span class="text-white/60 font-label-caps text-[10px] uppercase tracking-widest mb-1">Publications</span>
+            <span class="text-white font-headline-md text-3xl">16</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-white/60 font-label-caps text-[10px] uppercase tracking-widest mb-1">Indexed (Q1–Q3)</span>
+            <span class="text-white font-headline-md text-3xl">4</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-white/60 font-label-caps text-[10px] uppercase tracking-widest mb-1">Years' Research</span>
+            <span class="text-white font-headline-md text-3xl">5+</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-white/60 font-label-caps text-[10px] uppercase tracking-widest mb-1">Awards &amp; Honours</span>
+            <span class="text-white font-headline-md text-3xl">6+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about" class="py-28 px-margin-mobile md:px-margin-desktop bg-surface">
+    <div class="max-w-container-max mx-auto reveal">
+      <div class="w-full flex flex-wrap items-baseline gap-4 mb-16 border-b border-outline-variant/30 pb-4">
+        <span class="font-mono-data text-on-tertiary-container text-sm">01 / RESEARCHER</span>
+        <h2 class="font-headline-lg text-headline-lg text-primary uppercase">About</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+        <!-- Portrait -->
+        <div class="lg:col-span-4 flex justify-center lg:justify-start">
+          <div class="w-56 md:w-72 lg:w-full max-w-xs">
+            <div class="aspect-[4/5] w-full overflow-hidden rounded-xl bg-gradient-to-b from-surface-container to-surface-container-high border border-outline-variant/30 shadow-sm">
+              <img alt="Bagas Aditya Portrait" class="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/ADBb0uiWUCGTnSf6apoa3nKhKGqCb7r8WaCLEMjOmdlRtkN9POweVSEmLJk1pMHZTqVVWMf75bWVyi5lZe7RLQMhQk7tQLxhaFPny81FdapI8W1Qi-tgctqViN0FCb8OxHSNL1XYfbupI_bA_Gisy0anAwyXwLRJtgMtswGX9NMwe9R8DAJjSYEdSNTUMKfqnRkQO1IzD8c7kyMKCQ9bVGma0f_KjBjdvqXFT3MSvkt0UOj3snDQVWwqQ9QrOA"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bio -->
+        <div class="lg:col-span-8 flex flex-col gap-6">
+          <h3 class="font-headline-md text-3xl md:text-4xl text-primary font-bold leading-tight">Human geography, grounded in fieldwork.</h3>
+          <p class="font-body-lg text-on-surface-variant leading-relaxed">Human geographer specialising in the urban informal economy of Indonesia. I hold a Master of Geography (Second Class Honours, Division A) from the University of Melbourne and a Bachelor of Science from Universitas Gadjah Mada, where I developed strong skills in spatial mapping, analysis, and spatio-temporal modelling.</p>
+          <p class="font-body-md text-on-surface-variant leading-relaxed">My work combines quantitative and qualitative methods to study informal livelihoods, economic resilience, and urban governance, with field experience across Yogyakarta and other Indonesian cities. I have published in international journals, including Q1 and Q2 outlets, and now seek to extend this work into doctoral research on measuring informality in the urban South.</p>
+
+          <div class="mt-2">
+            <span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest">Research Interests</span>
+            <div class="flex flex-wrap gap-2 mt-3">
+              <span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full font-mono-data text-[12px]">Urban informal economy &amp; livelihoods</span>
+              <span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full font-mono-data text-[12px]">Spatial analysis of informality &amp; urban morphology</span>
+              <span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full font-mono-data text-[12px]">Self-organisation in informal settlements &amp; markets</span>
+              <span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full font-mono-data text-[12px]">Urban governance &amp; formalisation in the Global South</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 mt-4">
+            <a href="#contact" class="bg-[#2e3131] text-white px-8 py-2.5 rounded-full font-bold hover:bg-primary transition-all uppercase tracking-widest text-[11px]">Get in Touch</a>
+            <a href="#experience" class="border border-outline-variant px-5 py-2.5 text-[10px] uppercase tracking-widest flex items-center gap-2 rounded-full hover:bg-primary hover:text-white hover:border-primary transition-all">Experience <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-2 sm:gap-6 text-[10px] font-mono-data text-on-surface-variant uppercase tracking-widest mt-2">
+            <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px] text-on-tertiary-container">mail</span> adityabagas.official@gmail.com</span>
+            <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px] text-on-tertiary-container">call</span> +61 493 320 958</span>
+            <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px] text-on-tertiary-container">location_on</span> Sleman, DI Yogyakarta</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESEARCH SNAPSHOT (visual) ============ -->
+  <section id="data" class="py-20 px-margin-mobile md:px-margin-desktop bg-surface-container-low">
+    <div class="max-w-container-max mx-auto reveal">
+      <div class="relative w-full aspect-video md:aspect-[21/9] bg-surface-dim rounded-xl overflow-hidden hud-border group">
+        <img alt="Spatial data landscape" class="w-full h-full object-cover opacity-90 transition-transform duration-[2000ms] group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF8fLTSm4j8LZQ1CcOcMV1aQsjPilY0zA43IeIRlGH0lFMVXsx-4NougvnOQbctaX_p1mK-s73p6Kj0kw1BwscEbzRdHrQ5yGyqbsvAVQ9naovgg0_UEsQdv9-2GAj0BaCuuC1doKGVzvCJ_UkFTpJCZWeo0B72q5eXTF3mW7fFydSB-zcseNEnS_yBeno1KhKYQpxenjlODqLOL1Ax4_5wEBBPTmpsmk58ORgGMBEEmPB3Ft5Vc0UepBMHndMKn-cSiv9ecrhXA"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent"></div>
+        <div class="absolute top-8 left-8 p-6 bg-white/95 backdrop-blur-md border border-outline-variant/30 rounded-lg shadow-xl max-w-xs transform group-hover:translate-x-2 transition-transform duration-500">
+          <h4 class="font-label-caps text-label-caps text-secondary mb-4">RESEARCH SNAPSHOT</h4>
+          <div class="flex flex-col gap-3">
+            <div class="flex justify-between items-center border-b border-outline-variant/20 pb-2">
+              <span class="font-mono-data text-label-caps opacity-70">PUBLICATIONS</span>
+              <span class="font-mono-data text-label-caps text-on-tertiary-container">16</span>
+            </div>
+            <div class="flex justify-between items-center border-b border-outline-variant/20 pb-2">
+              <span class="font-mono-data text-label-caps opacity-70">INDEXED Q1–Q3</span>
+              <span class="font-mono-data text-label-caps">4</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="font-mono-data text-label-caps opacity-70">FIELDWORK</span>
+              <span class="font-mono-data text-label-caps">YOGYAKARTA +</span>
+            </div>
+          </div>
+          <a href="#contact" class="block text-center w-full mt-6 py-2 bg-primary text-on-primary font-label-caps rounded hover:bg-on-tertiary-container transition-colors">DOWNLOAD CV</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section id="skills" class="py-28 px-margin-mobile md:px-margin-desktop bg-white">
+    <div class="max-w-container-max mx-auto reveal">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+        <div class="md:col-span-4 flex flex-col justify-center gap-6">
+          <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase tracking-widest">Skills &amp; Methods</span>
+          <h2 class="font-headline-md text-headline-md text-primary">Interdisciplinary Toolkit</h2>
+          <p class="font-body-md text-on-surface-variant leading-relaxed">Combining spatial science with mixed-methods social research to study informality in the urban South.</p>
+        </div>
+        <div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-px bg-outline-variant/20">
+          <div class="p-10 bg-white hover:bg-surface-container-low transition-colors">
+            <div class="font-mono-data text-on-tertiary-container mb-5">01</div>
+            <h4 class="font-headline-md text-2xl mb-3 text-primary">Geospatial &amp; Spatial Analysis</h4>
+            <p class="font-body-md text-on-surface-variant">ArcGIS Pro, spatial mapping, spatio-temporal modelling, and fieldwork.</p>
+          </div>
+          <div class="p-10 bg-white hover:bg-surface-container-low transition-colors">
+            <div class="font-mono-data text-on-tertiary-container mb-5">02</div>
+            <h4 class="font-headline-md text-2xl mb-3 text-primary">Quantitative &amp; Statistical</h4>
+            <p class="font-body-md text-on-surface-variant">SPSS, Tableau, Microsoft Power BI, and Excel for analysis and visualisation.</p>
+          </div>
+          <div class="p-10 bg-white hover:bg-surface-container-low transition-colors">
+            <div class="font-mono-data text-on-tertiary-container mb-5">03</div>
+            <h4 class="font-headline-md text-2xl mb-3 text-primary">Qualitative Methods</h4>
+            <p class="font-body-md text-on-surface-variant">Ethnographic fieldwork, semi-structured interviews, content and visual analysis.</p>
+          </div>
+          <div class="p-10 bg-white hover:bg-surface-container-low transition-colors">
+            <div class="font-mono-data text-on-tertiary-container mb-5">04</div>
+            <h4 class="font-headline-md text-2xl mb-3 text-primary">Tools &amp; Design</h4>
+            <p class="font-body-md text-on-surface-variant">Mendeley, EndNote, Adobe InDesign, and Adobe Premiere Pro.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div class="mt-12 flex flex-wrap items-center gap-3">
+        <span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest mr-2">Languages:</span>
+        <span class="px-3 py-1.5 bg-surface-container text-on-surface-variant rounded-full font-mono-data text-[12px]">English — Professional</span>
+        <span class="px-3 py-1.5 bg-surface-container text-on-surface-variant rounded-full font-mono-data text-[12px]">Indonesian — Native</span>
+        <span class="px-3 py-1.5 bg-surface-container text-on-surface-variant rounded-full font-mono-data text-[12px]">Javanese — Native</span>
+        <span class="px-3 py-1.5 bg-surface-container text-on-surface-variant rounded-full font-mono-data text-[12px]">French — Beginner</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE + EDUCATION ============ -->
+  <section id="experience" class="py-28 px-margin-mobile md:px-margin-desktop bg-surface">
+    <div class="max-w-container-max mx-auto reveal">
+      <div class="w-full flex flex-wrap items-baseline gap-4 mb-16 border-b border-outline-variant/30 pb-4">
+        <span class="font-mono-data text-on-tertiary-container text-sm">02 / TRAJECTORY</span>
+        <h2 class="font-headline-lg text-headline-lg text-primary uppercase">Experience &amp; Education</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        <!-- Research Experience -->
+        <div class="lg:col-span-7">
+          <h3 class="font-headline-md text-2xl text-primary mb-8">Research Experience</h3>
+          <div class="flex flex-col gap-8 border-l border-outline-variant/40 pl-6">
+            <div class="relative">
+              <span class="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full bg-on-tertiary-container ring-4 ring-surface"></span>
+              <div class="flex flex-wrap justify-between items-baseline gap-2">
+                <h4 class="font-headline-md text-xl text-primary">Researcher</h4>
+                <span class="font-mono-data text-[12px] text-on-tertiary-container">Jan 2025 – Present</span>
+              </div>
+              <p class="font-mono-data text-[13px] text-secondary mb-3">Center for Environmental, Social, and Governance Studies</p>
+              <ul class="list-disc pl-5 flex flex-col gap-2 font-body-md text-on-surface-variant text-[15px]">
+                <li>Policy-oriented research on the circular economy in Indonesia, including community-based organic waste valorisation through black soldier fly (maggot) cultivation, examining its governance and implications for local livelihoods.</li>
+                <li>Collaborative research with Bank Indonesia on circular economy and MSME development, producing analysis to inform regional economic and sustainability policy.</li>
+                <li>Authoring a working paper on the governance and resilience of informal enterprises and UMKM in the post-pandemic period.</li>
+              </ul>
+            </div>
+            <div class="relative">
+              <span class="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full bg-secondary ring-4 ring-surface"></span>
+              <div class="flex flex-wrap justify-between items-baseline gap-2">
+                <h4 class="font-headline-md text-xl text-primary">Research &amp; Development Staff</h4>
+                <span class="font-mono-data text-[12px] text-on-tertiary-container">Jan 2021 – Dec 2021</span>
+              </div>
+              <p class="font-mono-data text-[13px] text-secondary mb-3">Ministry of Education and Culture, Jakarta</p>
+              <ul class="list-disc pl-5 flex flex-col gap-2 font-body-md text-on-surface-variant text-[15px]">
+                <li>Conducted development research on student achievement programs; produced a report presented to the Secretary General of the Ministry.</li>
+                <li>Designed and managed 21 national academic competitions involving 33,070 university students, coordinating with university officials nationwide.</li>
+                <li>Authored executive summaries, policy briefs, and reports for senior supervisors.</li>
+              </ul>
+            </div>
+            <div class="relative">
+              <span class="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full bg-secondary ring-4 ring-surface"></span>
+              <div class="flex flex-wrap justify-between items-baseline gap-2">
+                <h4 class="font-headline-md text-xl text-primary">Assistant Researcher</h4>
+                <span class="font-mono-data text-[12px] text-on-tertiary-container">Jun 2020 – Dec 2020</span>
+              </div>
+              <p class="font-mono-data text-[13px] text-secondary mb-3">Center for Population and Policy Studies, Universitas Gadjah Mada</p>
+              <ul class="list-disc pl-5 flex flex-col gap-2 font-body-md text-on-surface-variant text-[15px]">
+                <li>Wrote research proposals for collaborative projects with BKKBN and UGM, securing two funded grants (IDR 60 million and IDR 40 million).</li>
+                <li>Contributed the Labour Development Planning chapter to the Regional Development Work Plan (RKPD) for Bontang City.</li>
+                <li>Co-authored research presented at international conferences, including Scopus-indexed articles.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Education + Certs -->
+        <div class="lg:col-span-5 flex flex-col gap-10">
+          <div>
+            <h3 class="font-headline-md text-2xl text-primary mb-8">Education</h3>
+            <div class="flex flex-col gap-5">
+              <div class="p-6 bg-surface-container-lowest border border-outline-variant/20 rounded-xl">
+                <div class="flex justify-between items-baseline gap-2 mb-1">
+                  <h4 class="font-headline-md text-lg text-primary">Master of Geography</h4>
+                  <span class="font-mono-data text-[12px] text-on-tertiary-container whitespace-nowrap">2022 – 2024</span>
+                </div>
+                <p class="font-body-md text-on-surface-variant text-[15px]">The University of Melbourne, Australia</p>
+                <p class="font-mono-data text-[12px] text-secondary mt-1">GPA 3.72/4.00 · Second Class Honours, Div. A</p>
+              </div>
+              <div class="p-6 bg-surface-container-lowest border border-outline-variant/20 rounded-xl">
+                <div class="flex justify-between items-baseline gap-2 mb-1">
+                  <h4 class="font-headline-md text-lg text-primary">Bachelor of Science</h4>
+                  <span class="font-mono-data text-[12px] text-on-tertiary-container whitespace-nowrap">2016 – 2020</span>
+                </div>
+                <p class="font-body-md text-on-surface-variant text-[15px]">Universitas Gadjah Mada, Indonesia</p>
+                <p class="font-mono-data text-[12px] text-secondary mt-1">GPA 3.78/4.00 · Spatial mapping, analysis &amp; fieldwork</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-headline-md text-2xl text-primary mb-5">Certifications</h3>
+            <ul class="flex flex-col gap-2 font-body-md text-on-surface-variant text-[15px]">
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px] text-on-tertiary-container">verified</span> Melbourne Plus: Community Engagement (2022)</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px] text-on-tertiary-container">verified</span> Melbourne Plus: Innovation (2022)</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px] text-on-tertiary-container">verified</span> Digital Industry Project Completer (2022)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PUBLICATIONS ============ -->
+  <section id="publications" class="py-28 px-margin-mobile md:px-margin-desktop bg-surface-container-low">
+    <div class="max-w-container-max mx-auto">
+      <header class="mb-12 reveal">
+        <div class="flex items-baseline gap-4 mb-6">
+          <span class="font-mono-data text-on-tertiary-container text-sm">03 / SCHOLARSHIP</span>
+        </div>
+        <div class="max-w-3xl">
+          <h2 class="font-headline-xl text-headline-xl text-primary mb-4">Selected Publications</h2>
+          <p class="font-body-lg text-body-lg text-on-surface-variant">Peer-reviewed research on the informal economy, urban growth, migration, and digital geography — published in international journals including Q1 and Q2 outlets.</p>
+        </div>
+      </header>
+
+      <!-- Filter -->
+      <div class="flex flex-wrap items-center gap-3 border-b border-outline-variant/20 pb-8 mb-12 reveal">
+        <span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest mr-2">Filter by Theme:</span>
+        <button data-filter="all" class="filter-btn px-5 py-2 rounded-full border border-primary bg-primary text-on-primary font-label-caps text-label-caps transition-all">All</button>
+        <button data-filter="informal" class="filter-btn px-5 py-2 rounded-full border border-outline-variant text-on-surface-variant hover:border-primary font-label-caps text-label-caps transition-all">Informal Economy</button>
+        <button data-filter="spatial" class="filter-btn px-5 py-2 rounded-full border border-outline-variant text-on-surface-variant hover:border-primary font-label-caps text-label-caps transition-all">Spatial &amp; Environment</button>
+        <button data-filter="migration" class="filter-btn px-5 py-2 rounded-full border border-outline-variant text-on-surface-variant hover:border-primary font-label-caps text-label-caps transition-all">Migration &amp; Digital</button>
+      </div>
+
+      <!-- Featured cards -->
+      <div id="pub-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter mb-16">
+
+        <article data-category="migration" class="pub-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-28 bg-gradient-to-br from-primary to-primary-container flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">public</span>
+              <span class="font-mono-data text-mono-data text-white">Q1 · DIGITAL GEOGRAPHY</span>
+            </div>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Migration &amp; Digital Geography</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Meeting Refugees on Instagram: Platformisation of News and Knowledge Production</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Digital Geography and Society, 9, 100129 (2025).</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Platformisation</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Refugees</span>
+            </div>
+            <a class="mt-auto inline-flex items-center gap-2 font-label-caps text-label-caps text-primary group-hover:gap-4 transition-all" href="#">READ PUBLICATION <span class="material-symbols-outlined">arrow_forward</span></a>
+          </div>
+        </article>
+
+        <article data-category="informal" class="pub-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-28 bg-gradient-to-br from-on-tertiary-fixed-variant to-tertiary-container flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">storefront</span>
+              <span class="font-mono-data text-mono-data text-white">Q3 · LABOUR ECONOMICS</span>
+            </div>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Urban Informal Economy</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Rethinking Informal Economy Resilience during Crisis: Experience from COVID-19</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">The Indian Journal of Labour Economics, 66(3), 711–737 (2023).</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Resilience</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">COVID-19</span>
+            </div>
+            <a class="mt-auto inline-flex items-center gap-2 font-label-caps text-label-caps text-primary group-hover:gap-4 transition-all" href="#">READ PUBLICATION <span class="material-symbols-outlined">arrow_forward</span></a>
+          </div>
+        </article>
+
+        <article data-category="spatial" class="pub-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-28 bg-gradient-to-br from-secondary to-on-secondary-fixed-variant flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">map</span>
+              <span class="font-mono-data text-mono-data text-white">Q2 · APPLIED GEOGRAPHY</span>
+            </div>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Spatial Modelling &amp; Environment</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Modeling Spatio-Temporal Patterns of Urban Growth in a Tsunami-Prone Area: Pacitan</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Papers in Applied Geography, 11(4), 450–469 (2025).</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Spatio-temporal</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Urban Growth</span>
+            </div>
+            <a class="mt-auto inline-flex items-center gap-2 font-label-caps text-label-caps text-primary group-hover:gap-4 transition-all" href="#">READ PUBLICATION <span class="material-symbols-outlined">arrow_forward</span></a>
+          </div>
+        </article>
+
+        <article data-category="informal" class="pub-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-28 bg-gradient-to-br from-on-tertiary-fixed-variant to-tertiary-container flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">analytics</span>
+              <span class="font-mono-data text-mono-data text-white">Q2 · SOCIAL POLICY</span>
+            </div>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Urban Informal Economy</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Unveiling the Scholarly Landscape of Informal Economy Research: A Bibliometric Analysis</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">International Journal of Sociology and Social Policy (2026).</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Bibliometrics</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Informal Economy</span>
+            </div>
+            <a class="mt-auto inline-flex items-center gap-2 font-label-caps text-label-caps text-primary group-hover:gap-4 transition-all" href="#">READ PUBLICATION <span class="material-symbols-outlined">arrow_forward</span></a>
+          </div>
+        </article>
+
+        <article data-category="migration" class="pub-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-28 bg-gradient-to-br from-primary to-primary-container flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">groups</span>
+              <span class="font-mono-data text-mono-data text-white">GEOGRAFI INDONESIA</span>
+            </div>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Migration &amp; Digital Geography</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Come to be Stranded: The Dynamics of Refugee Influx in Three Indonesian Government Regimes</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Majalah Geografi Indonesia, 37(2) (2023).</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Migration</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Governance</span>
+            </div>
+            <a class="mt-auto inline-flex items-center gap-2 font-label-caps text-label-caps text-primary group-hover:gap-4 transition-all" href="#">READ PUBLICATION <span class="material-symbols-outlined">arrow_forward</span></a>
+          </div>
+        </article>
+
+        <article data-category="spatial" class="pub-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-28 bg-gradient-to-br from-secondary to-on-secondary-fixed-variant flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">terrain</span>
+              <span class="font-mono-data text-mono-data text-white">IOP EES</span>
+            </div>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Spatial Modelling &amp; Environment</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Farmers' Perception and Knowledge on Landslide Occurrences in Beruk Village, Karanganyar</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">IOP Conf. Series: Earth and Environmental Science, 451, 012050 (2020).</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Hazard</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Fieldwork</span>
+            </div>
+            <a class="mt-auto inline-flex items-center gap-2 font-label-caps text-label-caps text-primary group-hover:gap-4 transition-all" href="#">READ PUBLICATION <span class="material-symbols-outlined">arrow_forward</span></a>
+          </div>
+        </article>
+
+      </div>
+      <p id="no-results" class="hidden text-center text-on-surface-variant font-body-md py-8">No publications in this theme yet.</p>
+
+      <!-- Full list -->
+      <div class="reveal">
+        <h3 class="font-headline-md text-2xl text-primary mb-8 border-t border-outline-variant/20 pt-10">Full Publication List</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-gutter gap-y-10">
+
+          <div>
+            <h4 class="font-label-caps text-label-caps text-on-tertiary-container uppercase tracking-widest mb-4">Urban Informal Economy &amp; Livelihoods</h4>
+            <ul class="flex flex-col gap-3 font-body-md text-[14px] text-on-surface-variant leading-relaxed">
+              <li>Amri, I. &amp; Aditya, B. (2026). Unveiling the Scholarly Landscape of Informal Economy Research amid the COVID-19 Pandemic: A Bibliometric Analysis. <em>International Journal of Sociology and Social Policy.</em> <span class="text-on-tertiary-container font-mono-data text-[12px]">[Q2]</span></li>
+              <li>Aditya, B. &amp; Amri, I. (2023). Rethinking Informal Economy Resilience during Crisis: Experience from COVID-19 Pandemic. <em>The Indian Journal of Labour Economics, 66</em>(3), 711–737. <span class="text-on-tertiary-container font-mono-data text-[12px]">[Q3]</span></li>
+              <li>Pitoyo, A. J., Aditya, B., Amri, I. &amp; Rokhim, A. A. (2021). Impacts and Strategies Behind COVID-19-Induced Economic Crisis: Evidence from the Informal Economy. <em>The Indian Journal of Labour Economics, 64</em>, 641–661.</li>
+              <li>Pitoyo, A. J., Rokhim, A., Amri, I. &amp; Aditya, B. (2021). Livelihood of Street Vendors in Yogyakarta amidst the COVID-19 Pandemic. <em>E3S Web of Conferences, 325.</em></li>
+              <li>Pitoyo, A. J., Aditya, B. &amp; Amri, I. (2020). The Impacts of the COVID-19 Pandemic on the Informal Economic Sector in Indonesia. <em>E3S Web of Conferences, 200</em>, 03014.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-label-caps text-label-caps text-on-tertiary-container uppercase tracking-widest mb-4">Urban Growth, Spatial Modelling &amp; Environmental Geography</h4>
+            <ul class="flex flex-col gap-3 font-body-md text-[14px] text-on-surface-variant leading-relaxed">
+              <li>Amri, I., Saringatin, S., Aditya, B. &amp; Adinugraha, A. S. (2025). Modeling Spatio-Temporal Pattern of Urban Growth in Tsunami-Prone Area: Pacitan Town, East Java. <em>Papers in Applied Geography, 11</em>(4), 450–469. <span class="text-on-tertiary-container font-mono-data text-[12px]">[Q2]</span></li>
+              <li>Aditya, B., Amri, I. &amp; Putri, R. F. (2020). Farmers' Perception and Knowledge on Landslide Occurrences in Beruk Village, Karanganyar. <em>IOP Conf. Series: EES, 451</em>, 012050.</li>
+              <li>Septianingrum, R. S., Aditya, B., et al. (2020). Economic Inequality and its Impact on Human Development: Banten Province 2011–2015. <em>IOP Conf. Series: EES, 451</em>, 012107.</li>
+              <li>Sukamdi, Putri, R. F., Aditya, B., et al. (2022). Demographic Issues in Local Area: Kretek Sub-district, Bantul Regency. <em>IOP Conf. Series: EES, 1089</em>(1), 012047.</li>
+              <li>Ningrum, E., Amri, I., Aditya, B. &amp; Putri, R. F. (2021). <em>IOP Conf. Series: EES, 686</em>, 012019.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-label-caps text-label-caps text-on-tertiary-container uppercase tracking-widest mb-4">Migration, Mobility &amp; Digital Geography</h4>
+            <ul class="flex flex-col gap-3 font-body-md text-[14px] text-on-surface-variant leading-relaxed">
+              <li>Aditya, B. (2025). Meeting Refugees on Instagram: Platformisation of News and Knowledge Production about Refugees. <em>Digital Geography and Society, 9</em>, 100129. <span class="text-on-tertiary-container font-mono-data text-[12px]">[Q1]</span></li>
+              <li>Aditya, B. &amp; Pitoyo, A. J. (2023). Come to be Stranded: The Dynamics of Refugee Influx in Three Indonesian Government Regimes. <em>Majalah Geografi Indonesia, 37</em>(2).</li>
+              <li>Pitoyo, A. J., Aditya, B., Sumini, Nugraha, A. &amp; Nurhayati, S. (2021). Return Migration during the COVID-19 Outbreak in the Special Region of Yogyakarta. <em>GeoEco, 7</em>(1).</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-label-caps text-label-caps text-on-tertiary-container uppercase tracking-widest mb-4">Edited Volume &amp; Public Writing</h4>
+            <ul class="flex flex-col gap-3 font-body-md text-[14px] text-on-surface-variant leading-relaxed">
+              <li>Jason, A., Aditya, B., Jonathan, H. H. &amp; Afdhal, F. N. (eds.) (2024). <em>Indonesia Dari Seberang.</em> Jakarta: NTD Publishing.</li>
+              <li>Aditya, B. (2025). Dampak revitalisasi Kota Yogyakarta: Masihkah 'berhati nyaman' bagi warga sekitar? <em>The Conversation.</em></li>
+              <li>Aditya, B. (2024). Dulu pahlawan, kini gelagapan: pentingnya adaptasi sektor informal usai pandemi. <em>The Conversation.</em></li>
+              <li>Aditya, B. (2024). Rohingya di Indonesia: bagaimana dehumanisasi terhadap pengungsi terjadi di media sosial. <em>The Conversation.</em></li>
+              <li>Aditya, B. (2024). Untuk merawat aktivisme mahasiswa, Indonesia perlu belajar dari Australia. <em>The Conversation.</em></li>
+              <li>Aditya, B. &amp; Nelson, J. (2023). Earth's Invisible Shield Can Help Reveal Our Past and Our Future. <em>Pursuit, University of Melbourne.</em></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AWARDS ============ -->
+  <section id="awards" class="py-24 px-margin-mobile md:px-margin-desktop bg-white">
+    <div class="max-w-container-max mx-auto reveal">
+      <div class="w-full flex flex-wrap items-baseline gap-4 mb-12 border-b border-outline-variant/30 pb-4">
+        <span class="font-mono-data text-on-tertiary-container text-sm">04 / RECOGNITION</span>
+        <h2 class="font-headline-lg text-headline-lg text-primary uppercase">Awards &amp; Honours</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
+        <div class="p-7 bg-surface-container-low rounded-xl border border-outline-variant/20"><span class="material-symbols-outlined text-on-tertiary-container mb-3 block">emoji_events</span><p class="font-headline-md text-lg text-primary mb-1">Best Paper</p><p class="font-body-md text-[14px] text-on-surface-variant">Int. Conference for Science and Technology, Yogyakarta (2024 &amp; 2020)</p></div>
+        <div class="p-7 bg-surface-container-low rounded-xl border border-outline-variant/20"><span class="material-symbols-outlined text-on-tertiary-container mb-3 block">school</span><p class="font-headline-md text-lg text-primary mb-1">Government Scholarship</p><p class="font-body-md text-[14px] text-on-surface-variant">Indonesian Government Scholarship for Master's Degree (2022)</p></div>
+        <div class="p-7 bg-surface-container-low rounded-xl border border-outline-variant/20"><span class="material-symbols-outlined text-on-tertiary-container mb-3 block">payments</span><p class="font-headline-md text-lg text-primary mb-1">Research Grant</p><p class="font-body-md text-[14px] text-on-surface-variant">Universitas Gadjah Mada (2021)</p></div>
+        <div class="p-7 bg-surface-container-low rounded-xl border border-outline-variant/20"><span class="material-symbols-outlined text-on-tertiary-container mb-3 block">workspace_premium</span><p class="font-headline-md text-lg text-primary mb-1">Best Graduate Student</p><p class="font-body-md text-[14px] text-on-surface-variant">Universitas Gadjah Mada (2020)</p></div>
+        <div class="p-7 bg-surface-container-low rounded-xl border border-outline-variant/20"><span class="material-symbols-outlined text-on-tertiary-container mb-3 block">science</span><p class="font-headline-md text-lg text-primary mb-1">Intel ISEF Finalist</p><p class="font-body-md text-[14px] text-on-surface-variant">Intel International Science &amp; Engineering Fair, Arizona, USA (2016)</p></div>
+        <div class="p-7 bg-surface-container-low rounded-xl border border-outline-variant/20"><span class="material-symbols-outlined text-on-tertiary-container mb-3 block">military_tech</span><p class="font-headline-md text-lg text-primary mb-1">Bronze Medal</p><p class="font-body-md text-[14px] text-on-surface-variant">GENIUS Olympiad, New York, USA (2016)</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT / CTA + REFEREES ============ -->
+  <section id="contact" class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop my-24">
+    <div class="bg-primary-container text-on-primary-fixed rounded-2xl p-10 md:p-16 relative overflow-hidden reveal">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-on-tertiary-container/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="font-headline-lg text-headline-lg text-white mb-6">Let's collaborate on research.</h2>
+          <p class="font-body-lg text-body-lg text-on-primary-container mb-8">Open to doctoral opportunities and collaborations on the urban informal economy, spatial analysis, and urban governance in the Global South.</p>
+          <div class="flex flex-col gap-3 font-body-md text-primary-fixed-dim">
+            <a href="mailto:adityabagas.official@gmail.com" class="flex items-center gap-3 hover:text-white transition-colors"><span class="material-symbols-outlined text-tertiary-fixed">mail</span> adityabagas.official@gmail.com</a>
+            <span class="flex items-center gap-3"><span class="material-symbols-outlined text-tertiary-fixed">call</span> +61 493 320 958</span>
+            <a href="https://linkedin.com/in/bagasaditya" class="flex items-center gap-3 hover:text-white transition-colors"><span class="material-symbols-outlined text-tertiary-fixed">link</span> linkedin.com/in/bagasaditya</a>
+            <span class="flex items-center gap-3"><span class="material-symbols-outlined text-tertiary-fixed">location_on</span> Tegalyoso, Banyuraden, Gamping, Sleman, DI Yogyakarta</span>
+          </div>
+        </div>
+        <div class="bg-white/5 border border-on-primary-container/30 rounded-xl p-8">
+          <h3 class="font-label-caps text-label-caps text-tertiary-fixed uppercase tracking-widest mb-6">Referees</h3>
+          <div class="flex flex-col gap-6">
+            <div>
+              <p class="font-headline-md text-lg text-white">Dr. Ariane Utomo</p>
+              <p class="font-body-md text-[14px] text-primary-fixed-dim">Senior Lecturer in Demography, The University of Melbourne</p>
+              <p class="font-mono-data text-[12px] text-on-tertiary-container mt-1">ariane.utomo@unimelb.edu.au</p>
+            </div>
+            <div>
+              <p class="font-headline-md text-lg text-white">Dr. Agus Joko Pitoyo</p>
+              <p class="font-body-md text-[14px] text-primary-fixed-dim">Director, Center for Population and Policy Studies, UGM</p>
+              <p class="font-mono-data text-[12px] text-on-tertiary-container mt-1">aguspit@mail.ugm.ac.id</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="w-full py-16 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest border-t border-outline-variant/20">
+  <div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+    <div class="flex flex-col gap-2 items-center md:items-start">
+      <span class="font-headline-md text-2xl font-extrabold text-primary">Bagas Aditya</span>
+      <p class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">© 2026 · Human Geographer — Urban Informal Economy &amp; Spatial Analysis</p>
+    </div>
+    <div class="flex gap-gutter font-label-caps text-[10px] uppercase tracking-widest">
+      <a class="text-on-surface-variant hover:text-on-tertiary-container transition-colors" href="https://linkedin.com/in/bagasaditya">LinkedIn</a>
+      <a class="text-on-surface-variant hover:text-on-tertiary-container transition-colors" href="mailto:adityabagas.official@gmail.com">Email</a>
+      <a class="text-on-surface-variant hover:text-on-tertiary-container transition-colors" href="#publications">Publications</a>
+      <a class="text-on-surface-variant hover:text-on-tertiary-container transition-colors" href="#home">Top</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* Particle system */
+  const particleContainer = document.getElementById('particles-container');
+  for (let i = 0; i < 50; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.width = size + 'px'; p.style.height = size + 'px';
+    p.style.left = (Math.random()*100) + '%'; p.style.top = (Math.random()*100) + '%';
+    const duration = Math.random() * 15 + 10;
+    p.style.transition = 'all ' + duration + 's linear';
+    particleContainer.appendChild(p);
+    setTimeout(() => { p.style.left = (Math.random()*100)+'%'; p.style.top = (Math.random()*100)+'%'; p.style.opacity = Math.random()*0.5; }, 100);
+    setInterval(() => { p.style.left = (Math.random()*100)+'%'; p.style.top = (Math.random()*100)+'%'; }, duration*1000);
+  }
+
+  /* Parallax */
+  document.addEventListener('mousemove', (e) => {
+    const bg = document.querySelector('.topographic-overlay');
+    const moveX = (e.clientX - window.innerWidth/2) * 0.01;
+    const moveY = (e.clientY - window.innerHeight/2) * 0.01;
+    if (bg) bg.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.1)`;
+  });
+
+  /* Scroll reveal */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in'); revealObserver.unobserve(entry.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  /* Publication filtering */
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('#pub-grid .pub-card');
+  const noResults = document.getElementById('no-results');
+  function setActive(btn) {
+    filterButtons.forEach(b => { b.classList.remove('bg-primary','text-on-primary','border-primary'); b.classList.add('border-outline-variant','text-on-surface-variant'); });
+    btn.classList.add('bg-primary','text-on-primary','border-primary');
+    btn.classList.remove('border-outline-variant','text-on-surface-variant');
+  }
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setActive(btn);
+      const f = btn.dataset.filter; let visible = 0;
+      cards.forEach(card => { const match = f === 'all' || card.dataset.category === f; card.classList.toggle('is-hidden', !match); if (match) visible++; });
+      noResults.classList.toggle('hidden', visible > 0);
+    });
+  });
+
+  /* Active nav highlight */
+  const navLinks = document.querySelectorAll('.nav-link');
+  const ids = ['home','about','skills','experience','publications'];
+  const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          const active = link.getAttribute('href') === '#' + id;
+          link.classList.toggle('text-on-tertiary-container', active);
+          link.classList.toggle('font-semibold', active);
+          link.classList.toggle('border-b-2', active);
+          link.classList.toggle('border-on-tertiary-container', active);
+          link.classList.toggle('text-on-surface-variant', !active);
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+  sections.forEach(s => navObserver.observe(s));
+</script>
+</body>
+</html>

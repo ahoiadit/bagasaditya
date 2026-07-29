@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GeoAnalytic · Bagas Aditya | Spatial Data &amp; Sustainable Growth</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-high": "#e7e8e7","on-tertiary-fixed-variant": "#005236","surface-bright": "#f9f9f8",
+          "surface-container-highest": "#e1e3e2","on-surface-variant": "#414846","on-primary": "#ffffff",
+          "surface-tint": "#49645d","primary-container": "#16302b","on-primary-fixed": "#05201b",
+          "secondary-fixed": "#dde5d5","on-secondary-container": "#5d6558","outline-variant": "#c1c8c5",
+          "on-tertiary-container": "#00a774","on-secondary-fixed": "#161d13","tertiary-fixed": "#6ffbbe",
+          "error-container": "#ffdad6","secondary-container": "#dae2d2","on-secondary": "#ffffff",
+          "tertiary-container": "#003320","primary": "#011b17","on-tertiary": "#ffffff",
+          "surface-container-low": "#f3f4f3","surface": "#f9f9f8","surface-container": "#edeeed",
+          "secondary": "#596154","on-secondary-fixed-variant": "#41493d","inverse-primary": "#b0cdc5",
+          "surface-container-lowest": "#ffffff","secondary-fixed-dim": "#c1c9b9","on-primary-container": "#7d9892",
+          "on-surface": "#191c1c","tertiary": "#001c10","inverse-surface": "#2e3131","outline": "#727876",
+          "surface-variant": "#e1e3e2","surface-dim": "#d9dad9","on-background": "#191c1c","background": "#f9f9f8",
+          "tertiary-fixed-dim": "#4edea3","error": "#ba1a1a","on-error-container": "#93000a",
+          "inverse-on-surface": "#f0f1f0","primary-fixed": "#cce9e1","on-tertiary-fixed": "#002113",
+          "on-error": "#ffffff","primary-fixed-dim": "#b0cdc5","on-primary-fixed-variant": "#324c46"
+        },
+        borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" },
+        spacing: { "margin-mobile": "20px", "container-max": "1280px", "gutter": "24px", "base": "8px", "margin-desktop": "64px" },
+        fontFamily: {
+          "mono-data": ["Inter"], "headline-md": ["Hanken Grotesk"], "body-lg": ["Inter"],
+          "headline-xl": ["Hanken Grotesk"], "label-caps": ["Inter"], "headline-lg": ["Hanken Grotesk"],
+          "headline-lg-mobile": ["Hanken Grotesk"], "body-md": ["Inter"], "headline-sm": ["Hanken Grotesk"]
+        },
+        fontSize: {
+          "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+          "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+          "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+          "headline-xl": ["60px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+          "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+          "headline-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+          "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+          "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+          "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  section[id] { scroll-margin-top: 96px; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .hud-overlay { background: rgba(1, 27, 23, 0.05); backdrop-filter: blur(4px); }
+  .hud-border { border: 1px solid rgba(89, 97, 84, 0.2); }
+  .animated-hero-bg { background: #011b17; position: relative; overflow: hidden; }
+  .video-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(1,27,23,0.85), rgba(1,27,23,0.5)); z-index: 2; }
+  .topographic-overlay {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuARbkIpWEj25_cGjHvC0PNpOU2_rHU7nxPtpQak5hx_b4LnDSdglJQOVVXLHsgDXH8z9-HddhSmSeFSrDPCG6prPecfo2YWyxHV34g050JShgLoFiqYX-LYGOf2_nIrW_WC2byuJzxZcT_qa6_h9-BNHepQXcTDfNbtjQYJttYQ16y8INgX0hsWEfTKPy3Gad7AuowghvPV_rDz3Z-3X2Sc7gtml_NIXZwkItLn39rBCX6V6sAzG3Yw5oShjAF43fnHPW1q7ItmUw);
+    background-size: cover; background-position: center; opacity: 0.15; mix-blend-mode: overlay; z-index: 3;
+  }
+  @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+  .scanline { background: linear-gradient(to bottom, transparent, rgba(0,167,116,0.15), transparent); height: 150px; width: 100%; position: absolute; animation: scanline 10s linear infinite; z-index: 4; }
+  .particle { position: absolute; background: #4edea3; border-radius: 50%; opacity: 0.3; pointer-events: none; z-index: 5; }
+  .hero-text-shadow { text-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+  .project-card.is-hidden { display: none; }
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+<!-- NAV -->
+<nav class="fixed top-0 left-1/2 -translate-x-1/2 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 max-w-container-max mx-auto bg-surface/80 backdrop-blur-md border-b border-outline-variant/20">
+  <a href="#home" class="font-headline-md text-headline-md font-bold text-primary">GeoAnalytic</a>
+  <div class="hidden md:flex items-center gap-6 lg:gap-gutter font-body-md text-body-md">
+    <a class="nav-link text-on-tertiary-container font-semibold border-b-2 border-on-tertiary-container py-1 transition-all" href="#home">Home</a>
+    <a class="nav-link text-on-surface-variant hover:text-primary transition-colors duration-200 py-1" href="#about">About</a>
+    <a class="nav-link text-on-surface-variant hover:text-primary transition-colors duration-200 py-1" href="#skills">Skills</a>
+    <a class="nav-link text-on-surface-variant hover:text-primary transition-colors duration-200 py-1" href="#projects">Projects</a>
+    <a class="nav-link text-on-surface-variant hover:text-primary transition-colors duration-200 py-1" href="#experience">Experience</a>
+  </div>
+  <a href="#contact" class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-caps text-label-caps hover:opacity-80 transition-all active:scale-95">Get in Touch</a>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section id="home" class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-margin-mobile md:px-margin-desktop py-20">
+    <div class="absolute inset-0 z-0 animated-hero-bg">
+      <video autoplay class="absolute inset-0 w-full h-full object-cover z-0 grayscale-[0.2] brightness-75" loop muted playsinline poster="https://lh3.googleusercontent.com/aida-public/AB6AXuAF8fLTSm4j8LZQ1CcOcMV1aQsjPilY0zA43IeIRlGH0lFMVXsx-4NougvnOQbctaX_p1mK-s73p6Kj0kw1BwscEbzRdHrQ5yGyqbsvAVQ9naovgg0_UEsQdv9-2GAj0BaCuuC1doKGVzvCJ_UkFTpJCZWeo0B72q5eXTF3mW7fFydSB-zcseNEnS_yBeno1KhKYQpxenjlODqLOL1Ax4_5wEBBPTmpsmk58ORgGMBEEmPB3Ft5Vc0UepBMHndMKn-cSiv9ecrhXA">
+        <source src="https://storage.googleapis.com/a1aa/video/deforestation_satellite_sim.mp4" type="video/mp4"/>
+      </video>
+      <div class="video-overlay opacity-70"></div>
+      <div class="absolute inset-0 topographic-overlay"></div>
+      <div class="scanline"></div>
+      <div class="absolute inset-0 overflow-hidden" id="particles-container"></div>
+      <div class="absolute inset-0 bg-primary/20 backdrop-blur-[0.5px]"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center z-10 w-full max-w-container-max mx-auto">
+      <div class="md:col-span-10 flex flex-col gap-8">
+        <div class="flex flex-col gap-3">
+          <span class="font-label-caps text-label-caps text-tertiary-fixed uppercase tracking-[0.2em] border-l-2 border-tertiary-fixed pl-4">Geospatial Analysis · Sustainability Consulting</span>
+          <h1 class="font-headline-xl text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[0.95] text-white uppercase font-extrabold hero-text-shadow">Bridging <span class="text-tertiary-fixed">Spatial Data</span> &amp; Sustainable Growth</h1>
+          <p class="font-mono-data text-mono-data text-white/70 mt-1">by Bagas Aditya — Human Geographer &amp; Sustainability Consultant</p>
+        </div>
+        <div class="flex flex-col md:flex-row gap-8 items-start md:items-center">
+          <p class="font-body-lg text-body-lg text-primary-fixed-dim max-w-md">Delivering climate risk, ESG, and decarbonisation solutions to Indonesia's leading enterprises — from state utilities to sovereign institutions.</p>
+          <div class="flex flex-col gap-3">
+            <a href="#projects" class="bg-white text-primary px-8 py-3 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-tertiary-fixed transition-colors">VIEW ENGAGEMENTS <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+            <a href="#about" class="border border-white/40 text-white px-8 py-3 rounded-full hover:bg-white/10 transition-colors backdrop-blur-sm text-center">ABOUT ME</a>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-8">
+          <div class="flex flex-col"><span class="text-white/60 font-label-caps text-[10px] uppercase tracking-widest mb-1">Engagements</span><span class="text-white font-headline-md text-3xl">12</span></div>
+          <div class="flex flex-col"><span class="text-white/60 font-label-caps text-[10px] uppercase tracking-widest mb-1">Enterprise Clients</span><span class="text-white font-headline-md text-3xl">6+</span></div>
+          <div class="flex flex-col"><span class="text-white/60 font-label-caps text-[10px] uppercase tracking-widest mb-1">Sectors Covered</span><span class="text-white font-headline-md text-3xl">5</span></div>
+          <div class="flex flex-col"><span class="text-white/60 font-label-caps text-[10px] uppercase tracking-widest mb-1">Years' Practice</span><span class="text-white font-headline-md text-3xl">5+</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-28 px-margin-mobile md:px-margin-desktop bg-surface">
+    <div class="max-w-container-max mx-auto reveal">
+      <div class="w-full flex flex-wrap items-baseline gap-4 mb-16 border-b border-outline-variant/30 pb-4">
+        <span class="font-mono-data text-on-tertiary-container text-sm">01 / STRATEGIST</span>
+        <h2 class="font-headline-lg text-headline-lg text-primary uppercase">About</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+        <div class="lg:col-span-4 flex justify-center lg:justify-start">
+          <div class="w-56 md:w-72 lg:w-full max-w-xs">
+            <div class="aspect-[4/5] w-full overflow-hidden rounded-xl bg-gradient-to-b from-surface-container to-surface-container-high border border-outline-variant/30 shadow-sm">
+              <img alt="Bagas Aditya Portrait" class="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-700" src="https://cesgs.unair.ac.id/wp-content/uploads/2026/07/Bagas-Aditya.png"/>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-8 flex flex-col gap-6">
+          <h3 class="font-headline-md text-3xl md:text-4xl text-primary font-bold leading-tight">Geospatial for Sustainability Business.</h3>
+          <p class="font-body-lg text-on-surface-variant leading-relaxed">Human geographer and sustainability consultant with an interdisciplinary training from the University of Melbourne (Master of Geography, Second Class Honours Div. A) and Universitas Gadjah Mada (BSc), where I built strong foundations in spatial mapping, spatio-temporal modelling, and mixed-methods field research.</p>
+          <p class="font-body-md text-on-surface-variant leading-relaxed">I now translate that toolkit into consulting deliverables for enterprise clients across telecommunications, energy, tourism, and financial services — from climate financial risk assessments aligned with IFRS S2, to decarbonisation roadmaps and interactive analytical dashboards. My practice bridges the gap between complex spatial and climate data and actionable business strategy.</p>
+          <div class="mt-2">
+            <span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest">Practice Areas</span>
+            <div class="flex flex-wrap gap-2 mt-3">
+              <span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full font-mono-data text-[12px]">Climate financial risk (IFRS S2 / TCFD)</span>
+              <span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full font-mono-data text-[12px]">ESG &amp; environmental risk assessment</span>
+              <span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full font-mono-data text-[12px]">Decarbonisation strategy &amp; roadmaps</span>
+              <span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full font-mono-data text-[12px]">Analytical dashboard development</span>
+              <span class="px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full font-mono-data text-[12px]">Sustainable urban &amp; regional development</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 mt-4">
+            <a href="#contact" class="bg-[#2e3131] text-white px-8 py-2.5 rounded-full font-bold hover:bg-primary transition-all uppercase tracking-widest text-[11px]">Get in Touch</a>
+            <a href="#experience" class="border border-outline-variant px-5 py-2.5 text-[10px] uppercase tracking-widest flex items-center gap-2 rounded-full hover:bg-primary hover:text-white hover:border-primary transition-all">Experience <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+          </div>
+          <div class="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-6 text-[10px] font-mono-data text-on-surface-variant uppercase tracking-widest mt-2">
+            <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px] text-on-tertiary-container">mail</span> adityabagas.official@gmail.com</span>
+            <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px] text-on-tertiary-container">call</span> +61 493 320 958</span>
+            <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px] text-on-tertiary-container">location_on</span> Sleman, DI Yogyakarta</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="py-28 px-margin-mobile md:px-margin-desktop bg-white">
+    <div class="max-w-container-max mx-auto reveal">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+        <div class="md:col-span-4 flex flex-col justify-center gap-6">
+          <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase tracking-widest">Technical Core</span>
+          <h2 class="font-headline-md text-headline-md text-primary">Interdisciplinary Toolkit</h2>
+          <p class="font-body-md text-on-surface-variant leading-relaxed">Precision is the language of sustainable development. My practice combines spatial science, statistical rigour, and field research with executive-level communication.</p>
+        </div>
+        <div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-px bg-outline-variant/20">
+          <div class="p-10 bg-white hover:bg-surface-container-low transition-colors">
+            <div class="font-mono-data text-on-tertiary-container mb-5">01</div>
+            <h4 class="font-headline-md text-2xl mb-3 text-primary">Spatial &amp; GIS Analysis</h4>
+            <p class="font-body-md text-on-surface-variant">ArcGIS Pro, spatial mapping, spatio-temporal modelling, and remote sensing for hazard exposure and asset-level risk mapping.</p>
+          </div>
+          <div class="p-10 bg-white hover:bg-surface-container-low transition-colors">
+            <div class="font-mono-data text-on-tertiary-container mb-5">02</div>
+            <h4 class="font-headline-md text-2xl mb-3 text-primary">Quantitative Analytics</h4>
+            <p class="font-body-md text-on-surface-variant">SPSS, Tableau, Microsoft Power BI, and Excel financial modelling for scenario analysis and executive dashboards.</p>
+          </div>
+          <div class="p-10 bg-white hover:bg-surface-container-low transition-colors">
+            <div class="font-mono-data text-on-tertiary-container mb-5">03</div>
+            <h4 class="font-headline-md text-2xl mb-3 text-primary">Field Research</h4>
+            <p class="font-body-md text-on-surface-variant">Ethnographic fieldwork, semi-structured interviews, and content and visual analysis to ground quantitative findings in reality.</p>
+          </div>
+          <div class="p-10 bg-white hover:bg-surface-container-low transition-colors">
+            <div class="font-mono-data text-on-tertiary-container mb-5">04</div>
+            <h4 class="font-headline-md text-2xl mb-3 text-primary">Communication &amp; Design</h4>
+            <p class="font-body-md text-on-surface-variant">Mendeley, EndNote, Adobe InDesign, and Premiere Pro for producing publication-grade deliverables and client briefings.</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 flex flex-wrap items-center gap-3">
+        <span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest mr-2">Languages:</span>
+        <span class="px-3 py-1.5 bg-surface-container text-on-surface-variant rounded-full font-mono-data text-[12px]">English — Professional</span>
+        <span class="px-3 py-1.5 bg-surface-container text-on-surface-variant rounded-full font-mono-data text-[12px]">Indonesian — Native</span>
+        <span class="px-3 py-1.5 bg-surface-container text-on-surface-variant rounded-full font-mono-data text-[12px]">Javanese — Native</span>
+        <span class="px-3 py-1.5 bg-surface-container text-on-surface-variant rounded-full font-mono-data text-[12px]">French — Beginner</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS / ENGAGEMENTS -->
+  <section id="projects" class="py-28 px-margin-mobile md:px-margin-desktop bg-surface">
+    <div class="max-w-container-max mx-auto">
+      <header class="mb-12 reveal">
+        <div class="flex items-baseline gap-4 mb-6"><span class="font-mono-data text-on-tertiary-container text-sm">02 / PORTFOLIO</span></div>
+        <div class="max-w-3xl">
+          <h2 class="font-headline-xl text-headline-xl text-primary mb-4">Consulting Engagements</h2>
+          <p class="font-body-lg text-body-lg text-on-surface-variant">Selected consulting projects delivered through the Center for ESG Studies (CESGS), FEB Universitas Airlangga — for state-owned enterprises, sovereign institutions, and listed corporates in Indonesia.</p>
+        </div>
+      </header>
+
+      <div class="flex flex-wrap items-center gap-3 border-b border-outline-variant/20 pb-8 mb-12 reveal">
+        <span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest mr-2">Filter by Domain:</span>
+        <button data-filter="all" class="filter-btn px-5 py-2 rounded-full border border-primary bg-primary text-on-primary font-label-caps text-label-caps transition-all">All</button>
+        <button data-filter="climate-risk" class="filter-btn px-5 py-2 rounded-full border border-outline-variant text-on-surface-variant hover:border-primary font-label-caps text-label-caps transition-all">Climate Risk</button>
+        <button data-filter="esg-environment" class="filter-btn px-5 py-2 rounded-full border border-outline-variant text-on-surface-variant hover:border-primary font-label-caps text-label-caps transition-all">ESG &amp; Environment</button>
+        <button data-filter="digital-platforms" class="filter-btn px-5 py-2 rounded-full border border-outline-variant text-on-surface-variant hover:border-primary font-label-caps text-label-caps transition-all">Digital Platforms</button>
+        <button data-filter="thought-leadership" class="filter-btn px-5 py-2 rounded-full border border-outline-variant text-on-surface-variant hover:border-primary font-label-caps text-label-caps transition-all">Thought Leadership</button>
+      </div>
+
+      <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+
+        <!-- 1. Indosat -->
+        <article data-category="climate-risk" class="project-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-32 bg-gradient-to-br from-primary via-primary-container to-on-primary-fixed-variant flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">cell_tower</span>
+              <span class="font-mono-data text-mono-data text-white">TELECOMMUNICATIONS</span>
+            </div>
+            <span class="material-symbols-outlined absolute right-5 top-5 text-tertiary-fixed/40 text-6xl">public</span>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Climate Risk</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Climate Risk Analysis for Indosat</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Enterprise-wide climate physical and transition risk assessment for one of Indonesia's largest telecommunications operators. Delivered site-level hazard exposure mapping, business continuity implications, and IFRS S2-aligned disclosure narrative.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">IFRS S2</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Physical risk</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Scenario analysis</span>
+            </div>
+            <p class="mt-auto font-mono-data text-[11px] text-secondary uppercase tracking-widest">Client · PT Indosat Ooredoo Hutchison</p>
+          </div>
+        </article>
+
+        <!-- 2. PLN Climate -->
+        <article data-category="climate-risk" class="project-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-32 bg-gradient-to-br from-on-tertiary-fixed-variant via-tertiary-container to-primary flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">bolt</span>
+              <span class="font-mono-data text-mono-data text-white">POWER UTILITY</span>
+            </div>
+            <span class="material-symbols-outlined absolute right-5 top-5 text-tertiary-fixed/40 text-6xl">electric_bolt</span>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Climate Risk</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Climate Risk &amp; Opportunities for PLN</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Integrated physical and transition risk assessment across PLN's generation, transmission, and distribution portfolio. NGFS scenario analysis paired with an opportunities register covering renewable expansion, grid modernisation, and just transition pathways.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">NGFS scenarios</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Transition risk</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Energy transition</span>
+            </div>
+            <p class="mt-auto font-mono-data text-[11px] text-secondary uppercase tracking-widest">Client · PT PLN (Persero)</p>
+          </div>
+        </article>
+
+        <!-- 3. PLN Social & Water -->
+        <article data-category="esg-environment" class="project-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-32 bg-gradient-to-br from-secondary via-on-secondary-fixed-variant to-primary flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">water_drop</span>
+              <span class="font-mono-data text-mono-data text-white">ESG · WATER</span>
+            </div>
+            <span class="material-symbols-outlined absolute right-5 top-5 text-tertiary-fixed/40 text-6xl">groups</span>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">ESG &amp; Environment</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Social, Environmental &amp; Water Risk for PLN</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Multi-dimensional risk assessment covering social licence to operate, environmental compliance, and water stress exposure across PLN's power generation portfolio — with particular focus on hydro dependency, community relations, and biodiversity-sensitive assets.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Water stress</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Social licence</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Biodiversity</span>
+            </div>
+            <p class="mt-auto font-mono-data text-[11px] text-secondary uppercase tracking-widest">Client · PT PLN (Persero)</p>
+          </div>
+        </article>
+
+        <!-- 4. ITDC -->
+        <article data-category="climate-risk" class="project-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-32 bg-gradient-to-br from-primary via-on-tertiary-fixed-variant to-tertiary-container flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">beach_access</span>
+              <span class="font-mono-data text-mono-data text-white">TOURISM · KEK</span>
+            </div>
+            <span class="material-symbols-outlined absolute right-5 top-5 text-tertiary-fixed/40 text-6xl">landscape</span>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Climate Risk</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Climate Risk &amp; Opportunities for ITDC</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Climate financial risk methodology for PT ITDC's flagship tourism destinations — Nusa Dua, Mandalika, and Golo Mori. Delivered a technical handbook, Excel workbook, interactive system dynamics simulator, and supporting literature review.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">System dynamics</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Handbook</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Tourism</span>
+            </div>
+            <p class="mt-auto font-mono-data text-[11px] text-secondary uppercase tracking-widest">Client · PT ITDC</p>
+          </div>
+        </article>
+
+        <!-- 5. Green Building BI -->
+        <article data-category="esg-environment" class="project-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-32 bg-gradient-to-br from-on-tertiary-fixed-variant via-tertiary-container to-primary-container flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">domain</span>
+              <span class="font-mono-data text-mono-data text-white">GREEN BUILDING</span>
+            </div>
+            <span class="material-symbols-outlined absolute right-5 top-5 text-tertiary-fixed/40 text-6xl">apartment</span>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">ESG &amp; Environment</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Green Building Study for Bank Indonesia</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Feasibility and benchmark study on green building certification and operational decarbonisation for Bank Indonesia's premise assets. Assessed retrofit options, energy efficiency measures, and pathway to GREENSHIP / EDGE certification.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">GREENSHIP</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Retrofit</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Energy audit</span>
+            </div>
+            <p class="mt-auto font-mono-data text-[11px] text-secondary uppercase tracking-widest">Client · Bank Indonesia</p>
+          </div>
+        </article>
+
+        <!-- 6. Project Hub -->
+        <article data-category="digital-platforms" class="project-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-32 bg-gradient-to-br from-inverse-surface via-primary to-primary-container flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">dashboard</span>
+              <span class="font-mono-data text-mono-data text-white">INTERNAL PLATFORM</span>
+            </div>
+            <span class="material-symbols-outlined absolute right-5 top-5 text-tertiary-fixed/40 text-6xl">hub</span>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Digital Platform</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Project Hub Dashboard Development</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Design and development of CESGS Project Hub — a single-file HTML operational platform integrating project tracking, cash-flow monitoring, CEO executive dashboard, research pipeline, and expert directory across engagements for PLN, Bank Indonesia, and Erasmus+ CBHE consortia.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">HTML / JS</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Apps Script</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Role-based access</span>
+            </div>
+            <p class="mt-auto font-mono-data text-[11px] text-secondary uppercase tracking-widest">Deployed at · projecthub.cesgs.or.id</p>
+          </div>
+        </article>
+
+        <!-- 7. Climate Opportunities Dashboard -->
+        <article data-category="digital-platforms" class="project-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-32 bg-gradient-to-br from-inverse-surface via-on-tertiary-fixed-variant to-tertiary-container flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">insights</span>
+              <span class="font-mono-data text-mono-data text-white">SCENARIO TOOL</span>
+            </div>
+            <span class="material-symbols-outlined absolute right-5 top-5 text-tertiary-fixed/40 text-6xl">trending_up</span>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Digital Platform</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Climate Opportunities Generator Dashboard</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Interactive scenario-planning tool that maps climate transition opportunities across sectors, identifying revenue upsides, cost avoidance, and resilience gains under different pathways. Pairs with every risk assessment as a companion opportunities register.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Scenario modelling</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">TCFD/IFRS S2</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Sector taxonomy</span>
+            </div>
+            <p class="mt-auto font-mono-data text-[11px] text-secondary uppercase tracking-widest">Used across · CESGS engagements</p>
+          </div>
+        </article>
+
+        <!-- 8. Carbon Calculator -->
+        <article data-category="digital-platforms" class="project-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-32 bg-gradient-to-br from-primary via-inverse-surface to-on-tertiary-fixed-variant flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">co2</span>
+              <span class="font-mono-data text-mono-data text-white">CARBON ACCOUNTING</span>
+            </div>
+            <span class="material-symbols-outlined absolute right-5 top-5 text-tertiary-fixed/40 text-6xl">eco</span>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Digital Platform</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Carbon Emission Calculator &amp; Decarbonisation Roadmap</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Full-scope carbon accounting tool covering Scope 1, 2, and 3 boundaries, coupled with an interactive decarbonisation roadmap builder. Generates SBTi-aligned reduction pathways and marginal abatement cost curves for corporate and financial institution clients.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Scope 1/2/3</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">SBTi pathway</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">MAC curves</span>
+            </div>
+            <p class="mt-auto font-mono-data text-[11px] text-secondary uppercase tracking-widest">Used across · CESGS engagements</p>
+          </div>
+        </article>
+
+        <!-- 9. IFRS S2 Playbook -->
+        <article data-category="thought-leadership" class="project-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-32 bg-gradient-to-br from-tertiary-container via-on-tertiary-fixed-variant to-primary flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">menu_book</span>
+              <span class="font-mono-data text-mono-data text-white">KNOWLEDGE PRODUCT</span>
+            </div>
+            <span class="material-symbols-outlined absolute right-5 top-5 text-tertiary-fixed/40 text-6xl">auto_stories</span>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Thought Leadership</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">IFRS S2 Playbook</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">A practitioner-facing guide that translates IFRS S2 climate-related disclosure requirements into an implementation workflow for Indonesian corporates — covering governance setup, materiality, physical and transition risk methodology, metrics and targets, and reporting alignment. Used as a reference across client engagements and internal training.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">IFRS S2</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Playbook</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Implementation</span>
+            </div>
+            <p class="mt-auto font-mono-data text-[11px] text-secondary uppercase tracking-widest">Author · CESGS Practice Asset</p>
+          </div>
+        </article>
+
+        <!-- 10. Speaker: IFRS S2 Implementation -->
+        <article data-category="thought-leadership" class="project-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-32 bg-gradient-to-br from-primary via-primary-container to-inverse-surface flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">mic</span>
+              <span class="font-mono-data text-mono-data text-white">INVITED SPEAKER</span>
+            </div>
+            <span class="material-symbols-outlined absolute right-5 top-5 text-tertiary-fixed/40 text-6xl">campaign</span>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Thought Leadership</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Speaker · IFRS S2 Implementation</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Invited speaker at industry forums on operationalising IFRS S2 climate-related financial disclosures. Sessions cover practical implementation gaps, sector-specific challenges, and alignment with the Indonesian regulatory landscape — drawing on live engagements with utilities, telcos, and financial institutions.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">IFRS S2</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Disclosure</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Industry forum</span>
+            </div>
+            <p class="mt-auto font-mono-data text-[11px] text-secondary uppercase tracking-widest">Format · Keynote &amp; panel sessions</p>
+          </div>
+        </article>
+
+        <!-- 11. Speaker: Guiding Corporates in Sustainable Reporting -->
+        <article data-category="thought-leadership" class="project-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-32 bg-gradient-to-br from-inverse-surface via-primary to-on-tertiary-fixed-variant flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">co_present</span>
+              <span class="font-mono-data text-mono-data text-white">INVITED SPEAKER</span>
+            </div>
+            <span class="material-symbols-outlined absolute right-5 top-5 text-tertiary-fixed/40 text-6xl">record_voice_over</span>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Thought Leadership</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Speaker · Guiding Corporates in Sustainable Reporting</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Invited speaker guiding corporates on sustainability disclosure practice — moving beyond compliance-driven reporting toward strategy-integrated disclosures aligned with ISSB, TCFD, and GRI standards. Sessions address common pitfalls, data readiness, and building an internal reporting operating model.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">ISSB</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">GRI</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Reporting</span>
+            </div>
+            <p class="mt-auto font-mono-data text-[11px] text-secondary uppercase tracking-widest">Format · Corporate briefings &amp; workshops</p>
+          </div>
+        </article>
+
+        <!-- 12. Policy Note Kemenko Infrastruktur -->
+        <article data-category="thought-leadership" class="project-card group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 reveal flex flex-col">
+          <div class="relative h-32 bg-gradient-to-br from-on-secondary-fixed-variant via-secondary to-primary-container flex items-end p-5">
+            <div class="hud-overlay px-3 py-1.5 rounded flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary-fixed">policy</span>
+              <span class="font-mono-data text-mono-data text-white">POLICY NOTE</span>
+            </div>
+            <span class="material-symbols-outlined absolute right-5 top-5 text-tertiary-fixed/40 text-6xl">account_balance</span>
+          </div>
+          <div class="p-7 flex flex-col flex-1">
+            <span class="font-label-caps text-label-caps text-on-tertiary-container uppercase mb-3 block">Thought Leadership</span>
+            <h3 class="font-headline-md text-xl text-primary mb-3 leading-snug">Policy Note · Sustainability Reporting for the Infrastructure Sector</h3>
+            <p class="font-body-md text-[14px] text-on-surface-variant mb-4">Policy note prepared for the Coordinating Ministry for Infrastructure and Regional Development (Kemenko Infrastruktur) on advancing sustainability disclosure practice across Indonesia's infrastructure sector. Sets out the current readiness gap, regulatory alignment considerations (IFRS S1/S2, POJK 51), and a pragmatic pathway for state-owned infrastructure enterprises to build reporting capability.</p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Policy note</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">Infrastructure sector</span>
+              <span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded font-mono-data text-[12px]">POJK 51</span>
+            </div>
+            <p class="mt-auto font-mono-data text-[11px] text-secondary uppercase tracking-widest">Client · Kemenko Infrastruktur</p>
+          </div>
+        </article>
+
+      </div>
+      <p id="no-results" class="hidden text-center text-on-surface-variant font-body-md py-16">No engagements in this domain yet.</p>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE + EDUCATION -->
+  <section id="experience" class="py-28 px-margin-mobile md:px-margin-desktop bg-white">
+    <div class="max-w-container-max mx-auto reveal">
+      <div class="w-full flex flex-wrap items-baseline gap-4 mb-16 border-b border-outline-variant/30 pb-4">
+        <span class="font-mono-data text-on-tertiary-container text-sm">03 / TRAJECTORY</span>
+        <h2 class="font-headline-lg text-headline-lg text-primary uppercase">Experience &amp; Education</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        <div class="lg:col-span-7">
+          <h3 class="font-headline-md text-2xl text-primary mb-8">Professional Experience</h3>
+          <div class="flex flex-col gap-8 border-l border-outline-variant/40 pl-6">
+            <div class="relative">
+              <span class="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full bg-on-tertiary-container ring-4 ring-white"></span>
+              <div class="flex flex-wrap justify-between items-baseline gap-2">
+                <h4 class="font-headline-md text-xl text-primary">Researcher / Sustainability Consultant</h4>
+                <span class="font-mono-data text-[12px] text-on-tertiary-container">Jan 2025 – Present</span>
+              </div>
+              <p class="font-mono-data text-[13px] text-secondary mb-3">Center for Environmental, Social &amp; Governance Studies (CESGS), FEB Universitas Airlangga</p>
+              <ul class="list-disc pl-5 flex flex-col gap-2 font-body-md text-on-surface-variant text-[15px]">
+                <li>Lead technical delivery on climate financial risk and ESG advisory engagements for state-owned enterprises (PLN, ITDC), listed corporates (Indosat), and sovereign institutions (Bank Indonesia).</li>
+                <li>Design and develop internal analytical platforms — Project Hub, climate opportunities generator, carbon calculator — that scale consulting delivery across the practice.</li>
+                <li>Contribute policy-oriented research on the circular economy in Indonesia, including community-based organic waste valorisation and its implications for local livelihoods.</li>
+              </ul>
+            </div>
+            <div class="relative">
+              <span class="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full bg-secondary ring-4 ring-white"></span>
+              <div class="flex flex-wrap justify-between items-baseline gap-2">
+                <h4 class="font-headline-md text-xl text-primary">Research &amp; Development Staff</h4>
+                <span class="font-mono-data text-[12px] text-on-tertiary-container">Jan 2021 – Dec 2021</span>
+              </div>
+              <p class="font-mono-data text-[13px] text-secondary mb-3">Ministry of Education and Culture, Jakarta</p>
+              <ul class="list-disc pl-5 flex flex-col gap-2 font-body-md text-on-surface-variant text-[15px]">
+                <li>Conducted development research on student achievement programs; produced a report presented to the Secretary General of the Ministry.</li>
+                <li>Designed and managed 21 national academic competitions involving 33,070 university students, coordinating with university officials nationwide.</li>
+                <li>Authored executive summaries, policy briefs, and reports for senior supervisors.</li>
+              </ul>
+            </div>
+            <div class="relative">
+              <span class="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full bg-secondary ring-4 ring-white"></span>
+              <div class="flex flex-wrap justify-between items-baseline gap-2">
+                <h4 class="font-headline-md text-xl text-primary">Assistant Researcher</h4>
+                <span class="font-mono-data text-[12px] text-on-tertiary-container">Jun 2020 – Dec 2020</span>
+              </div>
+              <p class="font-mono-data text-[13px] text-secondary mb-3">Center for Population and Policy Studies, Universitas Gadjah Mada</p>
+              <ul class="list-disc pl-5 flex flex-col gap-2 font-body-md text-on-surface-variant text-[15px]">
+                <li>Wrote research proposals for collaborative projects with BKKBN and UGM, securing two funded grants (IDR 60 million and IDR 40 million).</li>
+                <li>Contributed the Labour Development Planning chapter to the Regional Development Work Plan (RKPD) for Bontang City.</li>
+                <li>Co-authored research presented at international conferences and Scopus-indexed outlets.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 flex flex-col gap-10">
+          <div>
+            <h3 class="font-headline-md text-2xl text-primary mb-8">Education</h3>
+            <div class="flex flex-col gap-5">
+              <div class="p-6 bg-surface-container-low rounded-xl border border-outline-variant/20">
+                <div class="flex justify-between items-baseline gap-2 mb-1">
+                  <h4 class="font-headline-md text-lg text-primary">Master of Geography</h4>
+                  <span class="font-mono-data text-[12px] text-on-tertiary-container whitespace-nowrap">2022 – 2024</span>
+                </div>
+                <p class="font-body-md text-on-surface-variant text-[15px]">The University of Melbourne, Australia</p>
+                <p class="font-mono-data text-[12px] text-secondary mt-1">GPA 3.72/4.00 · Second Class Honours, Div. A</p>
+              </div>
+              <div class="p-6 bg-surface-container-low rounded-xl border border-outline-variant/20">
+                <div class="flex justify-between items-baseline gap-2 mb-1">
+                  <h4 class="font-headline-md text-lg text-primary">Bachelor of Science</h4>
+                  <span class="font-mono-data text-[12px] text-on-tertiary-container whitespace-nowrap">2016 – 2020</span>
+                </div>
+                <p class="font-body-md text-on-surface-variant text-[15px]">Universitas Gadjah Mada, Indonesia</p>
+                <p class="font-mono-data text-[12px] text-secondary mt-1">GPA 3.78/4.00 · Spatial mapping, analysis &amp; fieldwork</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-headline-md text-2xl text-primary mb-5">Certifications</h3>
+            <ul class="flex flex-col gap-2 font-body-md text-on-surface-variant text-[15px]">
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px] text-on-tertiary-container">verified</span> Melbourne Plus: Community Engagement (2022)</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px] text-on-tertiary-container">verified</span> Melbourne Plus: Innovation (2022)</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px] text-on-tertiary-container">verified</span> Digital Industry Project Completer (2022)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AWARDS -->
+  <section id="awards" class="py-24 px-margin-mobile md:px-margin-desktop bg-surface">
+    <div class="max-w-container-max mx-auto reveal">
+      <div class="w-full flex flex-wrap items-baseline gap-4 mb-12 border-b border-outline-variant/30 pb-4">
+        <span class="font-mono-data text-on-tertiary-container text-sm">04 / RECOGNITION</span>
+        <h2 class="font-headline-lg text-headline-lg text-primary uppercase">Awards &amp; Honours</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
+        <div class="p-7 bg-surface-container-lowest rounded-xl border border-outline-variant/20"><span class="material-symbols-outlined text-on-tertiary-container mb-3 block">emoji_events</span><p class="font-headline-md text-lg text-primary mb-1">Best Paper</p><p class="font-body-md text-[14px] text-on-surface-variant">Int. Conference for Science and Technology, Yogyakarta (2024 &amp; 2020)</p></div>
+        <div class="p-7 bg-surface-container-lowest rounded-xl border border-outline-variant/20"><span class="material-symbols-outlined text-on-tertiary-container mb-3 block">school</span><p class="font-headline-md text-lg text-primary mb-1">Government Scholarship</p><p class="font-body-md text-[14px] text-on-surface-variant">Indonesian Government Scholarship for Master's Degree (2022)</p></div>
+        <div class="p-7 bg-surface-container-lowest rounded-xl border border-outline-variant/20"><span class="material-symbols-outlined text-on-tertiary-container mb-3 block">payments</span><p class="font-headline-md text-lg text-primary mb-1">Research Grant</p><p class="font-body-md text-[14px] text-on-surface-variant">Universitas Gadjah Mada (2021)</p></div>
+        <div class="p-7 bg-surface-container-lowest rounded-xl border border-outline-variant/20"><span class="material-symbols-outlined text-on-tertiary-container mb-3 block">workspace_premium</span><p class="font-headline-md text-lg text-primary mb-1">Best Graduate Student</p><p class="font-body-md text-[14px] text-on-surface-variant">Universitas Gadjah Mada (2020)</p></div>
+        <div class="p-7 bg-surface-container-lowest rounded-xl border border-outline-variant/20"><span class="material-symbols-outlined text-on-tertiary-container mb-3 block">science</span><p class="font-headline-md text-lg text-primary mb-1">Intel ISEF Finalist</p><p class="font-body-md text-[14px] text-on-surface-variant">Intel International Science &amp; Engineering Fair, Arizona, USA (2016)</p></div>
+        <div class="p-7 bg-surface-container-lowest rounded-xl border border-outline-variant/20"><span class="material-symbols-outlined text-on-tertiary-container mb-3 block">military_tech</span><p class="font-headline-md text-lg text-primary mb-1">Bronze Medal</p><p class="font-body-md text-[14px] text-on-surface-variant">GENIUS Olympiad, New York, USA (2016)</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT + REFEREES -->
+  <section id="contact" class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop my-24">
+    <div class="bg-primary-container text-on-primary-fixed rounded-2xl p-10 md:p-16 relative overflow-hidden reveal">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-on-tertiary-container/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="font-headline-lg text-headline-lg text-white mb-6">Ready to spatialize your sustainability strategy?</h2>
+          <p class="font-body-lg text-body-lg text-on-primary-container mb-8">Open to consulting engagements, research collaborations, and doctoral opportunities on climate risk, ESG, and sustainable development in Indonesia and the Global South.</p>
+          <div class="flex flex-col gap-3 font-body-md text-primary-fixed-dim">
+            <a href="mailto:adityabagas.official@gmail.com" class="flex items-center gap-3 hover:text-white transition-colors"><span class="material-symbols-outlined text-tertiary-fixed">mail</span> adityabagas.official@gmail.com</a>
+            <span class="flex items-center gap-3"><span class="material-symbols-outlined text-tertiary-fixed">call</span> +61 493 320 958</span>
+            <a href="https://linkedin.com/in/bagasaditya" class="flex items-center gap-3 hover:text-white transition-colors"><span class="material-symbols-outlined text-tertiary-fixed">link</span> linkedin.com/in/bagasaditya</a>
+            <span class="flex items-center gap-3"><span class="material-symbols-outlined text-tertiary-fixed">location_on</span> Sleman, DI Yogyakarta</span>
+          </div>
+        </div>
+        <div class="bg-white/5 border border-on-primary-container/30 rounded-xl p-8">
+          <h3 class="font-label-caps text-label-caps text-tertiary-fixed uppercase tracking-widest mb-6">Referees</h3>
+          <div class="flex flex-col gap-6">
+            <div>
+              <p class="font-headline-md text-lg text-white">Dr. Ariane Utomo</p>
+              <p class="font-body-md text-[14px] text-primary-fixed-dim">Senior Lecturer in Demography, The University of Melbourne</p>
+              <p class="font-mono-data text-[12px] text-on-tertiary-container mt-1">ariane.utomo@unimelb.edu.au</p>
+            </div>
+            <div>
+              <p class="font-headline-md text-lg text-white">Dr. Agus Joko Pitoyo</p>
+              <p class="font-body-md text-[14px] text-primary-fixed-dim">Director, Center for Population and Policy Studies, UGM</p>
+              <p class="font-mono-data text-[12px] text-on-tertiary-container mt-1">aguspit@mail.ugm.ac.id</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="w-full py-16 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest border-t border-outline-variant/20">
+  <div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+    <div class="flex flex-col gap-2 items-center md:items-start">
+      <span class="font-headline-md text-2xl font-extrabold text-primary">GeoAnalytic</span>
+      <p class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">© 2026 GeoAnalytic · Bagas Aditya. Spatial Precision for a Sustainable Future.</p>
+    </div>
+    <div class="flex gap-gutter font-label-caps text-[10px] uppercase tracking-widest">
+      <a class="text-on-surface-variant hover:text-on-tertiary-container transition-colors" href="https://linkedin.com/in/bagasaditya">LinkedIn</a>
+      <a class="text-on-surface-variant hover:text-on-tertiary-container transition-colors" href="mailto:adityabagas.official@gmail.com">Email</a>
+      <a class="text-on-surface-variant hover:text-on-tertiary-container transition-colors" href="#projects">Engagements</a>
+      <a class="text-on-surface-variant hover:text-on-tertiary-container transition-colors" href="#home">Top</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const particleContainer = document.getElementById('particles-container');
+  for (let i = 0; i < 50; i++) {
+    const p = document.createElement('div'); p.className = 'particle';
+    const size = Math.random()*3+1; p.style.width = size+'px'; p.style.height = size+'px';
+    p.style.left = (Math.random()*100)+'%'; p.style.top = (Math.random()*100)+'%';
+    const duration = Math.random()*15+10; p.style.transition = 'all '+duration+'s linear';
+    particleContainer.appendChild(p);
+    setTimeout(() => { p.style.left = (Math.random()*100)+'%'; p.style.top = (Math.random()*100)+'%'; p.style.opacity = Math.random()*0.5; }, 100);
+    setInterval(() => { p.style.left = (Math.random()*100)+'%'; p.style.top = (Math.random()*100)+'%'; }, duration*1000);
+  }
+  document.addEventListener('mousemove', (e) => {
+    const bg = document.querySelector('.topographic-overlay');
+    const moveX = (e.clientX - window.innerWidth/2)*0.01, moveY = (e.clientY - window.innerHeight/2)*0.01;
+    if (bg) bg.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.1)`;
+  });
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in'); revealObserver.unobserve(entry.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('#projects-grid .project-card');
+  const noResults = document.getElementById('no-results');
+  function setActive(btn) {
+    filterButtons.forEach(b => { b.classList.remove('bg-primary','text-on-primary','border-primary'); b.classList.add('border-outline-variant','text-on-surface-variant'); });
+    btn.classList.add('bg-primary','text-on-primary','border-primary');
+    btn.classList.remove('border-outline-variant','text-on-surface-variant');
+  }
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setActive(btn);
+      const f = btn.dataset.filter; let visible = 0;
+      cards.forEach(card => { const match = f === 'all' || card.dataset.category === f; card.classList.toggle('is-hidden', !match); if (match) visible++; });
+      noResults.classList.toggle('hidden', visible > 0);
+    });
+  });
+  const navLinks = document.querySelectorAll('.nav-link');
+  const sections = ['home','about','skills','projects','experience'].map(id => document.getElementById(id)).filter(Boolean);
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          const active = link.getAttribute('href') === '#'+id;
+          link.classList.toggle('text-on-tertiary-container', active);
+          link.classList.toggle('font-semibold', active);
+          link.classList.toggle('border-b-2', active);
+          link.classList.toggle('border-on-tertiary-container', active);
+          link.classList.toggle('text-on-surface-variant', !active);
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+  sections.forEach(s => navObserver.observe(s));
+</script>
+</body>
+</html>
